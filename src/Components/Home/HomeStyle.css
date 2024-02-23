@@ -1,0 +1,42 @@
+.Home-main-div{
+    display: none;
+}
+
+@media screen and (max-width:600px) {
+    .Home-main-div{
+        display: block;
+    }
+    .Home-First-div{
+        height: 40vh;
+        width: 100%;
+        /* border: 1px Solid red; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .Home-First-div-camera{
+        font-size: 3rem;
+        color: gray;
+
+    }
+    .Home-First-div-image{
+        width: 20vw;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 3vh;
+    }
+    .Home-First-div-image img{
+        width: 100%;
+    }
+
+    .Home-First-div-upload-button{
+        width: 20vw;
+        height: 30px;
+        margin-top: 3vh;
+        border: none;
+        background-color: rgba(117, 109, 112, 0.3);
+        border-radius: 5px;
+    }
+}
