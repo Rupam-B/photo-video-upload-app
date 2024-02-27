@@ -39,4 +39,12 @@
         background-color: rgba(117, 109, 112, 0.3);
         border-radius: 5px;
     }
+
+
+
+    .Home-First-div-image iframe {
+        width: 20vw;  /* Adjust the width as needed */
+        
+    }
+    
 }

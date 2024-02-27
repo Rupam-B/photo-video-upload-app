@@ -1,100 +1,110 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './HomeStyle.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Home = () => {
+
+    const inputRef = useRef()
+    const inputVidRef = useRef()
+
     const [img, setImg] = useState(null);
     const [vid, setVid] = useState(null);
 
-    const handleCapturePhoto = async () => {
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const mediaRecorder = new MediaRecorder(mediaStream);
-            const chunks = [];
+    const handleCameraClick = () => {
+        inputRef.current.click();
+    };
+    const handleVideoClick = () => {
+        inputVidRef.current.click();
+    };
 
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    chunks.push(event.data);
-                }
-            };
+    const handleImageChange = (event) => {
+        const files = event.target.files;
 
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'image/jpeg' });
-                const photoUrl = URL.createObjectURL(blob);
-                setImg(photoUrl);
-            };
-
-            mediaRecorder.start();
-            setTimeout(() => {
-                mediaRecorder.stop();
-                mediaStream.getTracks().forEach(track => track.stop());
-            }, 3000); // Adjust the time as needed
-        } catch (error) {
-            console.error('Error accessing camera:', error);
+        if (files.length > 1) {
+            toast.error("You can only upload up to 1 images.");
+            return;
+        } else {
+            //   setEmployeeChangeImage(files)
+            const imageUrl = URL.createObjectURL(files[0]);
+            setImg(imageUrl);
         }
     };
 
-    const handleCaptureVideo = async () => {
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const mediaRecorder = new MediaRecorder(mediaStream);
-            const chunks = [];
 
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    chunks.push(event.data);
-                }
-            };
+    const handleVideoChange = (event) => {
+        const files = event.target.files;
 
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'video/webm' });
-                const videoUrl = URL.createObjectURL(blob);
-                setVid(videoUrl);
-            };
-
-            mediaRecorder.start();
-            setTimeout(() => {
-                mediaRecorder.stop();
-                mediaStream.getTracks().forEach(track => track.stop());
-            }, 5000); // Adjust the time as needed
-        } catch (error) {
-            console.error('Error accessing camera:', error);
+        if (files.length > 1) {
+            toast.error("You can only upload up to 1 images.");
+            return;
+        } else {
+            //   setEmployeeChangeImage(files)
+            const VideoUrl = URL.createObjectURL(files[0]);
+            setVid(VideoUrl);
         }
     };
 
-    const handleUpload = () => {
-        // Implement your upload logic here
-        console.log('Uploading:', img, vid);
-    };
+
 
     return (
         <div className='Home-main-div'>
             <div className='Home-First-div'>
                 <div className='Home-First-div-camera'>
-                    <i onClick={handleCapturePhoto} className="fa-solid fa-camera"></i>
+                    <i className="fa fa-camera" onClick={handleCameraClick}></i>
+                    <input
+                        onChange={handleImageChange}
+                        type="file"
+                        accept="image/*"
+                        capture="camera"
+                        style={{ display: 'none' }}
+                        id="inputImage"
+                        ref={inputRef}
+                    />
                 </div>
                 {img ? (
                     <>
                         <div className='Home-First-div-image'>
                             <img src={img} alt="Captured" />
                         </div>
-                        <button onClick={handleUpload} className='Home-First-div-upload-button'>Upload</button>
+                        <button className='Home-First-div-upload-button'>Upload</button>
                     </>
                 ) : ''}
             </div>
+
+
             <hr />
+
+
+
+
+            {/* For Video capture */}
+
             <div className='Home-First-div'>
                 <div className='Home-First-div-camera'>
-                    <i onClick={handleCaptureVideo} className="fa-solid fa-video"></i>
+                    <i className="fa-solid fa-video" onClick={handleVideoClick}></i>
+                    <input
+                        onChange={handleVideoChange}
+                        type="file"
+                        accept="video/*"
+                        capture="camera"
+                        style={{ display: 'none' }}
+                        id="inputVideo"
+                        ref={inputVidRef}
+                    />
                 </div>
                 {vid ? (
                     <>
                         <div className='Home-First-div-image'>
-                            <video controls>
-                                <source src={vid} type="video/webm" />
+                            {/* <iframe src={vid} title="Captured Video" frameborder="0"></iframe> */}
+                            <video controls width="100%" height="auto">
+                                <source src={vid} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
+
                         </div>
-                        <button onClick={handleUpload} className='Home-First-div-upload-button'>Upload</button>
+                        <button className='Home-First-div-upload-button'>Upload</button>
                     </>
                 ) : ''}
             </div>
