@@ -11,6 +11,9 @@ const Home = () => {
 
     const [img, setImg] = useState(null);
     const [vid, setVid] = useState(null);
+    const [isShowImg, setIsShowImg] = useState(false);
+    const [imageToShow, setImageToShow] = useState();
+    // const [isShowVid, setIsShowVid] = useState(false);
 
     const handleCameraClick = () => {
         inputRef.current.click();
@@ -46,10 +49,23 @@ const Home = () => {
         }
     };
 
-
+    const handleShowImage =(img)=>{
+        setImageToShow(img)
+        setTimeout(()=>{
+            setIsShowImg(true)
+        },100)
+        
+    }
 
     return (
         <div className='Home-main-div'>
+            <div className={isShowImg?'Show-Photo-Main-div':'Show-Photo-Main-div-inactive'}>
+            <i onClick={()=>setIsShowImg(false)} className="fa-solid fa-xmark show-Img-Close"></i>
+            <div className='Show-Photo-sub-div'>
+                <img src={imageToShow} alt="" />
+            </div>
+            </div>
+
             <div className='Home-First-div'>
                 <div className='Home-First-div-camera'>
                     <i className="fa fa-camera" onClick={handleCameraClick}></i>
@@ -66,7 +82,7 @@ const Home = () => {
                 {img ? (
                     <>
                         <div className='Home-First-div-image'>
-                            <img src={img} alt="Captured" />
+                            <img src={img} alt="Captured" onClick={()=>handleShowImage(img)} />
                         </div>
                         <button className='Home-First-div-upload-button'>Upload</button>
                     </>
